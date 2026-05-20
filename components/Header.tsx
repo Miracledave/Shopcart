@@ -1,3 +1,4 @@
+
 import Container from './Container'
 import React from 'react'
 import Logo from './Logo'
@@ -7,8 +8,13 @@ import CartIcon from './CartIcon'
 import FavouriteButton from './FavouriteButton'
 import SignIn from './SignIn'
 import MobileMenu from './MobileMenu'
+import { currentUser } from '@clerk/nextjs/server'
+import { ClerkLoaded, UserButton } from '@clerk/nextjs'
 
-const Header = () => {
+
+const Header = async() => {
+  const user = await currentUser();
+  console.log(user, "user");
   return (
     <header className='bg-white py-5 border-b border-b-black/10 '>
         <Container className='flex items-center justify-between text-lightColor'>
@@ -21,7 +27,13 @@ const Header = () => {
               <SearchBar />
               <CartIcon />
               <FavouriteButton />
-              <SignIn />
+               <ClerkLoaded>
+                {user ? (
+                  <UserButton />
+                ) : (
+                  <SignIn />
+                )}
+              </ClerkLoaded>
             </div>
         </Container>
     </header>
